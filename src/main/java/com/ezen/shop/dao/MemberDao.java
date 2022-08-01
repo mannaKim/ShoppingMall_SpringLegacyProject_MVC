@@ -19,6 +19,7 @@ public class MemberDao {
 	public MemberDao(ComboPooledDataSource dataSource) {
 		this.template = new JdbcTemplate(dataSource);
 	}
+	
 	public MemberVO getMember(String id) {
 		String sql = "select * from member where id=?";
 		List<MemberVO> list = template.query(sql, new RowMapper<MemberVO>() {
@@ -45,5 +46,14 @@ public class MemberDao {
 		if(list.size()==0) return null;
 		else return list.get(0); 
 		// 한 명의 멤버 데이터를 리턴받아야 하는 상황이라도, 결과를 리스트로 도출해서 첫번째 값을 리턴합니다.
+	}
+	
+	public int insertMember(MemberVO mvo) {
+		String sql = "insert into member(id,pwd,name,email,phone,zip_num,address1,address2,address3)"
+				+ " values(?,?,?,?,?,?,?,?,?)";
+		int result = template.update(sql,
+				mvo.getId(),mvo.getPwd(),mvo.getName(),mvo.getEmail(),mvo.getPhone(),
+				mvo.getZip_num(),mvo.getAddress1(),mvo.getAddress2(),mvo.getAddress3());
+		return result;
 	}
 }

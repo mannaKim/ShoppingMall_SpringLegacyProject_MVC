@@ -472,7 +472,6 @@ order by indate desc)
 where  rownum <=4;
 
 
-​
 
 select * from worker;
 

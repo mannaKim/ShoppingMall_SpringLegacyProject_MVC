@@ -49,4 +49,44 @@ public class MemberController {
 		session.removeAttribute("loginUser");
 		return "redirect:/";
 	}
+	
+	@RequestMapping("/contract")
+	public String contract(Model model, HttpServletRequest request) {
+		return "member/contract";
+	}
+	
+	@RequestMapping(value="joinForm", method=RequestMethod.POST)
+	public String join_form(Model model, HttpServletRequest request) {
+		return "member/joinForm";
+	}
+	
+	@RequestMapping("idCheckForm")
+	public String id_check_form(Model model, HttpServletRequest request) {
+		String id = request.getParameter("id");
+		MemberVO mvo = ms.getMember(id);
+		if(mvo==null) model.addAttribute("result" , -1);
+		else model.addAttribute("result", 1);
+		model.addAttribute("id",id);
+		return "member/idcheck";
+	}
+	
+	@RequestMapping(value="join", method=RequestMethod.POST)
+	public String join(Model model, HttpServletRequest request) {
+		MemberVO mvo = new MemberVO();
+		mvo.setId(request.getParameter("id"));
+		mvo.setPwd(request.getParameter("pwd"));
+		mvo.setName(request.getParameter("name"));
+		mvo.setEmail(request.getParameter("email"));
+		mvo.setPhone(request.getParameter("phone"));
+		mvo.setZip_num(request.getParameter("zip_num"));
+		mvo.setAddress1(request.getParameter("address1"));
+		mvo.setAddress2(request.getParameter("address2"));
+		mvo.setAddress3(request.getParameter("address3"));
+		int result = ms.insertMember(mvo);
+		
+		if(result==1) model.addAttribute("message","회원가입 완료. 로그인하세요.");
+		else model.addAttribute("message","회원가입 실패.");
+		
+		return "member/login";
+	}
 }
