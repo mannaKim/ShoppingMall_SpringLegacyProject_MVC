@@ -78,6 +78,7 @@ public class ProductDao {
 		return list;
 	}
 
+	
 	public List<ProductVO> getBestList() {
 		String sql = "select * from best_pro_view";
 		
@@ -93,6 +94,27 @@ public class ProductDao {
 			}
 		});
 		
+		return list;
+	}
+
+
+	public List<ProductVO> getKindList(String kind) {
+		String sql = "select * from product where kind=?";
+		List<ProductVO> list = template.query(sql, new RowMapper<ProductVO>() {
+			@Override
+			public ProductVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				ProductVO pvo = new ProductVO();
+				pvo.setPseq(rs.getInt("pseq"));
+				pvo.setName(rs.getString("name"));
+				pvo.setPrice1(rs.getInt("price1"));
+				pvo.setPrice2(rs.getInt("price2"));
+				pvo.setImage(rs.getString("image"));
+				pvo.setUseyn(rs.getString("useyn"));
+				pvo.setBestyn(rs.getString("bestyn"));
+				pvo.setIndate(rs.getTimestamp("indate"));
+				return pvo;
+			}
+		}, kind);
 		return list;
 	}
 }
