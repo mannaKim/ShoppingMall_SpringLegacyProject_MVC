@@ -3,7 +3,7 @@
 <%@ include file="/resources/sub01/sub_image_menu.html"%>
 <article>
 	<h2>Join Us</h2>
-	<form id="join" action="join" method="post" name="formm">
+	<form action="join" method="post" name="formm">
 		<fieldset>
 			<legend>Basic Info</legend>
 			<label>User ID</label><input type="text" name="id" size="12">
