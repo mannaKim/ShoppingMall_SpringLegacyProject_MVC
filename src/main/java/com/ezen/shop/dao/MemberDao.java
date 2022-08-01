@@ -51,9 +51,19 @@ public class MemberDao {
 	public int insertMember(MemberVO mvo) {
 		String sql = "insert into member(id,pwd,name,email,phone,zip_num,address1,address2,address3)"
 				+ " values(?,?,?,?,?,?,?,?,?)";
-		int result = template.update(sql,
-				mvo.getId(),mvo.getPwd(),mvo.getName(),mvo.getEmail(),mvo.getPhone(),
+		int result = template.update(sql,mvo.getId(),mvo.getPwd(),
+				mvo.getName(),mvo.getEmail(),mvo.getPhone(),
 				mvo.getZip_num(),mvo.getAddress1(),mvo.getAddress2(),mvo.getAddress3());
+		return result;
+	}
+
+	public int updateMember(MemberVO mvo) {
+		String sql = "update member set pwd=?, name=?, email=?, phone=?,"
+				+ " zip_num=?, address1=?, address2=?, address3=?"
+				+ " where id=?";
+		int result = template.update(sql, mvo.getPwd(),mvo.getName(),mvo.getEmail(),mvo.getPhone(),
+				mvo.getZip_num(),mvo.getAddress1(),mvo.getAddress2(),mvo.getAddress3(),
+				mvo.getId());
 		return result;
 	}
 }

@@ -52,27 +52,25 @@ function go_save(){
 		alert("이메일을 입력하세요.")
 		document.formm.email.focus();
 	}else {
-		document.formm.action="join";
 		document.formm.submit();
 	}
 }
 
 function go_update(){
-	if(document.joinForm.pwd.value==""){
+	if(document.formm.pwd.value==""){
 		alert("비밀번호를 입력하세요.")
-		document.joinForm.pwd.focus();
-	}else if(document.joinForm.pwd.value!=document.joinForm.pwdCheck.value){
+		document.formm.pwd.focus();
+	}else if(document.formm.pwd.value!=document.formm.pwdCheck.value){
 		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
-		document.joinForm.pwd.focus();
-	}else if(document.joinForm.name.value==""){
+		document.formm.pwd.focus();
+	}else if(document.formm.name.value==""){
 		alert("이름을 입력하세요.")
-		document.joinForm.name.focus();
-	}else if(document.joinForm.email.value==""){
+		document.formm.name.focus();
+	}else if(document.formm.email.value==""){
 		alert("이메일을 입력하세요.")
-		document.joinForm.email.focus();
+		document.formm.email.focus();
 	}else {
-		document.joinForm.action="shop.do";
-		document.joinForm.submit();
+		document.formm.submit();
 	}	
 }
 

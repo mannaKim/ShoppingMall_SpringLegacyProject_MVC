@@ -85,8 +85,33 @@ public class MemberController {
 		int result = ms.insertMember(mvo);
 		
 		if(result==1) model.addAttribute("message","회원가입 완료. 로그인하세요.");
-		else model.addAttribute("message","회원가입 실패.");
+		else model.addAttribute("message","회원가입 실패. 관리자에게 문의하세요.");
 		
 		return "member/login";
+	}
+	
+	@RequestMapping("memberEditForm")
+	public String member_edit_form(Model model, HttpServletRequest request) {
+		return "member/memberUpdateForm";
+	}
+	
+	@RequestMapping(value="memberUpdate", method=RequestMethod.POST)
+	public String member_update(Model model, HttpServletRequest request) {
+		MemberVO mvo = new MemberVO();
+		mvo.setId(request.getParameter("id"));
+		mvo.setPwd(request.getParameter("pwd"));
+		mvo.setName(request.getParameter("name"));
+		mvo.setEmail(request.getParameter("email"));
+		mvo.setPhone(request.getParameter("phone"));
+		mvo.setZip_num(request.getParameter("zip_num"));
+		mvo.setAddress1(request.getParameter("address1"));
+		mvo.setAddress2(request.getParameter("address2"));
+		mvo.setAddress3(request.getParameter("address3"));
+		int result = ms.updateMember(mvo);
+		
+		HttpSession session = request.getSession();
+		if(result==1) session.setAttribute("loginUser", mvo);
+		
+		return "redirect:/";
 	}
 }
