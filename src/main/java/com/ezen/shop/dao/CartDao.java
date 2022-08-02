@@ -34,15 +34,15 @@ public class CartDao {
 			@Override
 			public CartVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				CartVO cvo = new CartVO();
-				cvo.setCseq(rs.getInt("cseq"));
-				cvo.setId(rs.getString("id"));
-				cvo.setMname(rs.getString("mname"));
-				cvo.setPseq(rs.getInt("pseq"));
-				cvo.setPname(rs.getString("pname"));
-				cvo.setQuantity(rs.getInt("quantity"));
-				cvo.setPrice2(rs.getInt("price2"));
-				cvo.setResult(rs.getString("result"));
-				cvo.setIndate(rs.getTimestamp("indate"));
+				cvo.setCseq(rs.getInt("cseq")); 					//cvo.setCseq(rs.getInt(1));
+				cvo.setId(rs.getString("id")); 						//cvo.setResult(rs.getString(2));
+				cvo.setMname(rs.getString("mname"));		//cvo.setResult(rs.getString(3));
+				cvo.setPseq(rs.getInt("pseq"));						//cvo.setCseq(rs.getInt(4));
+				cvo.setPname(rs.getString("pname")); 			//cvo.setResult(rs.getString(5));
+				cvo.setQuantity(rs.getInt("quantity")); 			//cvo.setCseq(rs.getInt(6));
+				cvo.setPrice2(rs.getInt("price2")); 				//cvo.setCseq(rs.getInt(7));
+				cvo.setResult(rs.getString("result")); 			//cvo.setResult(rs.getString(8));
+				cvo.setIndate(rs.getTimestamp("indate")); 	//cvo.setIndate(rs.getTimestamp(9));
 				return cvo;
 			}
 		}, id);

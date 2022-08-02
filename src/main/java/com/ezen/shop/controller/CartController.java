@@ -46,7 +46,7 @@ public class CartController {
 		}
 	}
 	
-	@RequestMapping("cartList")
+	@RequestMapping("/cartList")
 	public ModelAndView cart_list(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		
