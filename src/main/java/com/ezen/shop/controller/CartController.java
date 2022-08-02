@@ -68,4 +68,18 @@ public class CartController {
 		return mav;
 	}
 	
+	@RequestMapping("/cartDelete")
+	public String cart_delete(/* HttpServletRequest request */
+			@RequestParam("cseq") String [] cseqArr) {
+		
+		// 기존에 사용하던 방식 : request.getParameterValues("cseq");로 배열 값 받기
+//		String [] cseqArr = request.getParameterValues("cseq");
+		
+		// 스프링프레임워크에서 사용하는 방식 : @RequestParam("cseq") String [] cseqArr을 매개변수로 설정
+		// @RequestParam으로 전달되는 다수개의 체크박스 값들을 배열로 전달받을 수 있습니다.
+		for(String cseq : cseqArr) {
+			cs.deleteCart(cseq);
+		}
+		return "redirect:/cartList";
+	}
 }
