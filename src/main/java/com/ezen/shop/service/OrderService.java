@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ezen.shop.dao.CartDao;
 import com.ezen.shop.dao.OrderDao;
 import com.ezen.shop.dto.CartVO;
+import com.ezen.shop.dto.OrderVO;
 
 @Service
 public class OrderService {
@@ -30,5 +31,9 @@ public class OrderService {
 			cdao.deleteCart(String.valueOf(cvo.getCseq()));
 		}
 		return oseq;
+	}
+
+	public List<OrderVO> listOrderByOseq(int oseq) {
+		return odao.listOrderByOseq(oseq);
 	}
 }
