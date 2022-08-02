@@ -1,5 +1,6 @@
 package com.ezen.shop.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,13 +44,16 @@ public class OrderController {
 		if(mvo==null) {
 			mav.setViewName("member/login");
 		}else {
-			List<OrderVO> list = os.listOrderByOseq(oseq);
-			int totalPrice=0;
-			for(OrderVO ovo : list) {
-				totalPrice += ovo.getPrice2() * ovo.getQuantity();
-			}
-			mav.addObject("orderList", list);
-			mav.addObject("totalPrice", totalPrice);
+//			List<OrderVO> list = os.listOrderByOseq(oseq);
+//			int totalPrice=0;
+//			for(OrderVO ovo : list) {
+//				totalPrice += ovo.getPrice2() * ovo.getQuantity();
+//			}
+			// 위 명령을 HashMap으로 받아서 간단하게 표현
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			result = os.listOrderByOseq(oseq);
+			mav.addObject("orderList", (List<OrderVO>)result.get("orderList"));
+			mav.addObject("totalPrice", (int)result.get("totalPrice"));
 			mav.setViewName("mypage/orderList");
 		}
 		return mav;

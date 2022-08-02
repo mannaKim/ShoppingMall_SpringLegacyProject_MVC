@@ -1,5 +1,6 @@
 package com.ezen.shop.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,17 @@ public class OrderService {
 		return oseq;
 	}
 
-	public List<OrderVO> listOrderByOseq(int oseq) {
-		return odao.listOrderByOseq(oseq);
+	public HashMap<String, Object> listOrderByOseq(int oseq) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		List<OrderVO> list = odao.listOrderByOseq(oseq);
+		int totalPrice = 0;
+		for(OrderVO ovo : list)
+			totalPrice += ovo.getPrice2() * ovo.getQuantity();
+		
+		result.put("orderList", list);
+		result.put("totalPrice", totalPrice);
+		
+		return result;
 	}
 }
