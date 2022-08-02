@@ -1,5 +1,6 @@
 package com.ezen.shop.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,5 +47,26 @@ public class OrderService {
 		result.put("totalPrice", totalPrice);
 		
 		return result;
+	}
+
+	public ArrayList<OrderVO> listMyPage(String id) {
+		ArrayList<OrderVO> orderList = new ArrayList<OrderVO>();
+		// 진행중인 주문내역의 주문번호(oseq)들을 조회
+		List<Integer> oseqList = odao.selectOseqOrderIng(id);
+		
+		// 위에서 얻은 주문번호(oseq)마다 주문내역(order_view에서) 조회
+		for(Integer oseq : oseqList) {
+			List<OrderVO> orderListIng = odao.listOrderByOseq(oseq);
+			
+			//조회한 주문 상품 리스트 중 첫번째 상품 꺼냄
+			OrderVO ovo = orderListIng.get(0);
+			ovo.setPname(ovo.getPname()+" 포함 "+orderListIng.size()+" 건"); // 상품명 변경
+			int totalPrice = 0;
+			for(OrderVO ovo1 : orderListIng)
+				totalPrice += ovo1.getPrice2() * ovo1.getQuantity();
+			ovo.setPrice2(totalPrice); // 리스트의 상품 총금액 계산해서 첫번째 상품의 가격으로 변경
+			orderList.add(ovo); // 리턴될 리스트에 추가
+		}
+		return orderList;
 	}
 }

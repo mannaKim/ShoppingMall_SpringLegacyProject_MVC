@@ -1,5 +1,6 @@
 package com.ezen.shop.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,6 +56,23 @@ public class OrderController {
 			mav.addObject("orderList", (List<OrderVO>)result.get("orderList"));
 			mav.addObject("totalPrice", (int)result.get("totalPrice"));
 			mav.setViewName("mypage/orderList");
+		}
+		return mav;
+	}
+	
+	@RequestMapping("/myPage")
+	public ModelAndView myPage(HttpServletRequest request) {
+		ModelAndView mav =  new ModelAndView();
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		if(mvo==null) {
+			mav.setViewName("member/login");
+		}else {
+			// mypage.jsp에 전달될 고객의 진행중인 주문 리스트 - orderList
+			ArrayList<OrderVO> orderList = os.listMyPage(mvo.getId());
+			mav.addObject("title", "["+mvo.getName()+"]님의 진행중인 주문 내역");
+			mav.addObject("orderList", orderList);
+			mav.setViewName("mypage/mypage");
 		}
 		return mav;
 	}
