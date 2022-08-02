@@ -310,7 +310,7 @@ insert into orders( oseq, id) values(orders_seq.nextVal, 'one');
 
 select * from orders;
 
-select max(oseq)  from orders;
+select max(oseq) from orders;
 
 insert into order_detail(odseq, oseq, pseq, quantity) values(order_detail_seq.nextval, 1, 1, 1);
 
@@ -328,7 +328,7 @@ insert into order_detail(odseq, oseq, pseq, quantity) values(order_detail_seq.ne
 ​
 insert into orders(oseq, id) values(orders_seq.nextval, 'one');
 
-select max(oseq)  from orders;
+select max(oseq) from orders;
 
 insert into order_detail(odseq, oseq, pseq, quantity) values(order_detail_seq.nextval, 3, 3, 1);
 

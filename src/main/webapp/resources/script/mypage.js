@@ -27,11 +27,11 @@ function go_cart_delete(){
 }
 
 function go_order_insert(){
-	document.formm.action="shop.do?command=orderInsert";
+	document.formm.action="orderInsert";
 	document.formm.submit();
 }
 
 function go_order(){
-	document.formm.action="shop.do?command=orderInsertOne";
+	document.formm.action="orderInsertOne";
 	document.formm.submit();
 }
