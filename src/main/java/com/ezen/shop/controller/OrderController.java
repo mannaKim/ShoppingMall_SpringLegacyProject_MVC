@@ -95,4 +95,21 @@ public class OrderController {
 		}
 		return mav;
 	}	
+	
+	@RequestMapping("/orderAll")
+	public ModelAndView order_all(HttpServletRequest request) {
+		ModelAndView mav =  new ModelAndView();
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		if(mvo==null) {
+			mav.setViewName("member/login");
+		}else {
+			// 고객의 토탈 주문 리스트 - orderList
+			ArrayList<OrderVO> orderList = os.listOrderAll(mvo.getId());
+			mav.addObject("title", "["+mvo.getName()+"]님의 총 주문 내역");
+			mav.addObject("orderList", orderList);
+			mav.setViewName("mypage/mypage");
+		}
+		return mav;
+	}
 }

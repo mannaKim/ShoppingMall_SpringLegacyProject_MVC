@@ -69,4 +69,21 @@ public class OrderService {
 		}
 		return orderList;
 	}
+
+	public ArrayList<OrderVO> listOrderAll(String id) {
+		ArrayList<OrderVO> orderList = new ArrayList<OrderVO>();
+		List<Integer> oseqList = odao.selectOseqOrderAll(id);
+
+		for(Integer oseq : oseqList) {
+			List<OrderVO> orderListIng = odao.listOrderByOseq(oseq);
+			OrderVO ovo = orderListIng.get(0);
+			ovo.setPname(ovo.getPname()+" 포함 "+orderListIng.size()+" 건");
+			int totalPrice = 0;
+			for(OrderVO ovo1 : orderListIng)
+				totalPrice += ovo1.getPrice2() * ovo1.getQuantity();
+			ovo.setPrice2(totalPrice);
+			orderList.add(ovo);
+		}
+		return orderList;
+	}
 }
