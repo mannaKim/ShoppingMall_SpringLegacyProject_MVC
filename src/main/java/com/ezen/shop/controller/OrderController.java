@@ -76,4 +76,23 @@ public class OrderController {
 		}
 		return mav;
 	}
+	
+	@RequestMapping("/orderDetail")
+	public ModelAndView order_detail(HttpServletRequest request, @RequestParam("oseq") int oseq) {
+		ModelAndView mav =  new ModelAndView();
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		if(mvo==null) {
+			mav.setViewName("member/login");
+		}else {
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			result = os.listOrderByOseq(oseq);
+			List<OrderVO> list = (List<OrderVO>)result.get("orderList");
+			mav.addObject("orderList", list);
+			mav.addObject("totalPrice", (int)result.get("totalPrice"));
+			mav.addObject("orderDetail", list.get(0));
+			mav.setViewName("mypage/orderDetail");
+		}
+		return mav;
+	}	
 }
