@@ -1,5 +1,6 @@
 package com.ezen.shop.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,13 +57,14 @@ public class CartController {
 		if(mvo==null) {
 			mav.setViewName("member/login");
 		}else {
-			List<CartVO> list = cs.listCart(mvo.getId());
-			int totalPrice = 0;
-			for(CartVO cvo : list)
-				totalPrice += cvo.getPrice2() * cvo.getQuantity();
-			
-			mav.addObject("totalPrice", totalPrice);
-			mav.addObject("cartList", list);
+//			List<CartVO> list = cs.listCart(mvo.getId());
+//			int totalPrice = 0;
+//			for(CartVO cvo : list)
+//				totalPrice += cvo.getPrice2() * cvo.getQuantity();
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			result = cs.listCart(mvo.getId());
+			mav.addObject("cartList", (List<CartVO>)result.get("cartList"));
+			mav.addObject("totalPrice", (int)result.get("totalPrice"));
 			mav.setViewName("mypage/cartList");
 		}
 		return mav;
