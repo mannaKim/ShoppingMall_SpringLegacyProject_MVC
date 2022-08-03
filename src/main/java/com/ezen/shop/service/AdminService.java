@@ -28,4 +28,16 @@ public class AdminService {
 		result.put("paging", paging);
 		return result;
 	}
+
+	public HashMap<String, Object> orderList(int page) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		Paging paging = new Paging();
+		paging.setPage(page);
+		paging.setTotalCount(adao.getAllCount("order_view"));
+		
+		result.put("orderList", adao.orderList(paging));
+		result.put("paging", paging);
+		return result;
+	}
 }

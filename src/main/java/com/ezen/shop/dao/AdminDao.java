@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.ezen.shop.dto.OrderVO;
 import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.util.Paging;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -75,5 +76,38 @@ public class AdminDao {
 			}
 		});
 		return list.get(0);
+	}
+
+
+	public List<OrderVO> orderList(Paging paging) {
+		String sql = "select * from ("
+				+ "select * from ("
+				+ "select rownum as rn, o.* from "
+				+ "((select * from order_view order by result, odseq desc) o)"
+				+ ") where rn>=?"
+				+ ") where rn<=?";
+		List<OrderVO> list = template.query(sql, new RowMapper<OrderVO>() {
+			@Override
+			public OrderVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				OrderVO ovo = new OrderVO();
+				ovo.setOdseq(rs.getInt("odseq"));
+				ovo.setOseq(rs.getInt("oseq"));
+				ovo.setIndate(rs.getTimestamp("indate"));
+				ovo.setId(rs.getString("id"));
+				ovo.setMname(rs.getString("mname"));
+				ovo.setZip_num(rs.getString("zip_num"));
+				ovo.setAddress1(rs.getString("address1"));
+				ovo.setAddress2(rs.getString("address2"));
+				ovo.setAddress3(rs.getString("address3"));
+				ovo.setPhone(rs.getString("phone"));
+				ovo.setPseq(rs.getInt("pseq"));
+				ovo.setPname(rs.getString("pname"));
+				ovo.setPrice2(rs.getInt("price2"));
+				ovo.setQuantity(rs.getInt("quantity"));
+				ovo.setResult(rs.getString("result"));
+				return ovo;
+			}
+		}, paging.getStartNum(), paging.getEndNum());
+		return list;
 	}
 }
