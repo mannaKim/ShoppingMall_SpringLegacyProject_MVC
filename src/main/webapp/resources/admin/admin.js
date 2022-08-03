@@ -16,7 +16,7 @@ function go_search(requestName){
 }
 
 function go_total(requestName){
-	document.frm.key.value=="";
+	document.frm.key.value="";
 	document.frm.action = requestName+"?page=1";
 	document.frm.submit();
 }

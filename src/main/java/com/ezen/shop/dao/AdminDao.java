@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.ezen.shop.dto.MemberVO;
 import com.ezen.shop.dto.OrderVO;
 import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.util.Paging;
@@ -107,6 +108,35 @@ public class AdminDao {
 				ovo.setQuantity(rs.getInt("quantity"));
 				ovo.setResult(rs.getString("result"));
 				return ovo;
+			}
+		}, key, paging.getStartNum(), paging.getEndNum());
+		return list;
+	}
+
+
+	public List<MemberVO> memberList(Paging paging, String key) {
+		String sql = "select * from ("
+				+ "select * from ("
+				+ "select rownum as rn, m.* from "
+				+ "((select * from member where name like '%'||?||'%' order by useyn desc, indate desc) m)"
+				+ ") where rn>=?"
+				+ ") where rn<=?";
+		List<MemberVO> list = template.query(sql, new RowMapper<MemberVO>() {
+			@Override
+			public MemberVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				MemberVO mvo = new MemberVO();
+				mvo.setId(rs.getString("id"));
+				mvo.setPwd(rs.getString("pwd"));
+				mvo.setName(rs.getString("name"));
+				mvo.setEmail(rs.getString("email"));
+				mvo.setPhone(rs.getString("phone"));
+				mvo.setZip_num(rs.getString("zip_num"));
+				mvo.setAddress1(rs.getString("address1"));
+				mvo.setAddress2(rs.getString("address2"));
+				mvo.setAddress3(rs.getString("address3"));
+				mvo.setUseyn(rs.getString("useyn"));
+				mvo.setIndate(rs.getTimestamp("indate"));
+				return mvo;
 			}
 		}, key, paging.getStartNum(), paging.getEndNum());
 		return list;

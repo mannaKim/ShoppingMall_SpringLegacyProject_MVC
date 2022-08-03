@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ezen.shop.dto.MemberVO;
 import com.ezen.shop.dto.OrderVO;
 import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.service.AdminService;
@@ -128,6 +129,47 @@ public class AdminController {
 			mav.addObject("paging", (Paging)resultMap.get("paging"));
 			mav.addObject("key", key);
 			mav.setViewName("admin/order/orderList");
+		}
+		return mav;
+	}
+	
+	@RequestMapping("/memberList")
+	public ModelAndView member_list(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		HttpSession session = request.getSession();
+		if(session.getAttribute("workId")==null){
+			mav.setViewName("redirect:/admin");
+		}else {
+			if(request.getParameter("first")!=null) {
+				session.removeAttribute("page");
+				session.removeAttribute("key");
+			}
+			
+			String key = "";
+			if(request.getParameter("key")!=null) {
+				key = request.getParameter("key");
+				session.setAttribute("key", key);
+			}else if(session.getAttribute("key")!=null) {
+				key = (String)session.getAttribute("key");
+			}else {
+				session.removeAttribute("key");
+			}
+			
+			int page = 1;
+			if(request.getParameter("page")!=null) {
+				page = Integer.parseInt(request.getParameter("page"));
+				session.setAttribute("page", page);
+			}else if(session.getAttribute("page")!=null) {
+				page = (int)session.getAttribute("page");
+			}else {
+				session.removeAttribute("page");
+			}
+			
+			HashMap<String, Object> resultMap = as.memberList(page, key);
+			mav.addObject("memberList", (List<MemberVO>)resultMap.get("memberList"));
+			mav.addObject("paging", (Paging)resultMap.get("paging"));
+			mav.addObject("key", key);
+			mav.setViewName("admin/member/memberList");
 		}
 		return mav;
 	}

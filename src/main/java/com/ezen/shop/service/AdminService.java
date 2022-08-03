@@ -40,4 +40,16 @@ public class AdminService {
 		result.put("paging", paging);
 		return result;
 	}
+
+	public HashMap<String, Object> memberList(int page, String key) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		Paging paging = new Paging();
+		paging.setPage(page);
+		paging.setTotalCount(adao.getAllCount("member", "name", key));
+		
+		result.put("memberList", adao.memberList(paging, key));
+		result.put("paging", paging);
+		return result;
+	}
 }
