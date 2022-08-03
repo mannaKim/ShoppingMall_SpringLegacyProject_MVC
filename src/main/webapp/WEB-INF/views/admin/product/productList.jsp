@@ -52,28 +52,10 @@
 				</c:otherwise>
 			</c:choose>
 		</table>
-		<div class="clear"></div>
-		<div id="paging" align="center" style="font-size:110%;">
-			<c:url var="action" value="productList" />
-			<c:if test="${paging.prev}">
-				<a href="${action}?page=${paging.beginPage-1}">◀</a>&nbsp;
-      		</c:if>
-			<c:forEach begin="${paging.beginPage}" end="${paging.endPage}" var="index">
-				<c:choose>
-					<c:when test="${paging.page==index}">
-						<span style="color: orange; font-weight:blod">${index}&nbsp;</span>
-					</c:when>
-					<c:otherwise>
-						<a href="${action}?page=${index}">${index}</a>&nbsp;
-          			</c:otherwise>
-				</c:choose>
-			</c:forEach>
-			<c:if test="${paging.next}">
-				<a href="${action}?page=${paging.endPage+1}">▶</a>&nbsp;
-      		</c:if>
-		</div>
-		<div class="clear"></div>
 		<br>
+		<jsp:include page="/resources/paging/paging.jsp">
+			<jsp:param value="productList" name="command"/>
+		</jsp:include>
 	</form>
 </article>
 <%@ include file="/resources/admin/footer.jsp" %>
