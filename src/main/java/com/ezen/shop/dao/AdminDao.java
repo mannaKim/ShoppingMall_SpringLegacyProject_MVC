@@ -40,11 +40,11 @@ public class AdminDao {
 	}
 
 
-	public List<ProductVO> productList(Paging paging) {
+	public List<ProductVO> productList(Paging paging, String key) {
 		String sql = "select * from ("
 				+ "select * from ("
 				+ "select rownum as rn, p.* from "
-				+ "((select * from product order by pseq desc) p)"
+				+ "((select * from product where name like '%'||?||'%' order by pseq desc) p)"
 				+ ") where rn>=?"
 				+ ") where rn<=?";
 		List<ProductVO> list = template.query(sql, new RowMapper<ProductVO>() {
@@ -62,28 +62,29 @@ public class AdminDao {
 				pvo.setIndate(rs.getTimestamp("indate"));
 				return pvo;
 			}
-		}, paging.getStartNum(), paging.getEndNum());
+		}, key, paging.getStartNum(), paging.getEndNum());
 		return list;
 	}
 
 
-	public int getAllCount(String tableName) {
-		String sql = "select count(*) as cnt from "+tableName;
+	public int getAllCount(String tableName, String fieldName, String key) {
+		String sql = "select count(*) as cnt from "+tableName
+				+" where "+fieldName+" like '%'||?||'%'";
 		List<Integer> list = template.query(sql, new RowMapper<Integer>() {
 			@Override
 			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return rs.getInt("cnt");
 			}
-		});
+		}, key);
 		return list.get(0);
 	}
 
 
-	public List<OrderVO> orderList(Paging paging) {
+	public List<OrderVO> orderList(Paging paging, String key) {
 		String sql = "select * from ("
 				+ "select * from ("
 				+ "select rownum as rn, o.* from "
-				+ "((select * from order_view order by result, odseq desc) o)"
+				+ "((select * from order_view where mname like '%'||?||'%' order by result, odseq desc) o)"
 				+ ") where rn>=?"
 				+ ") where rn<=?";
 		List<OrderVO> list = template.query(sql, new RowMapper<OrderVO>() {
@@ -107,7 +108,7 @@ public class AdminDao {
 				ovo.setResult(rs.getString("result"));
 				return ovo;
 			}
-		}, paging.getStartNum(), paging.getEndNum());
+		}, key, paging.getStartNum(), paging.getEndNum());
 		return list;
 	}
 }

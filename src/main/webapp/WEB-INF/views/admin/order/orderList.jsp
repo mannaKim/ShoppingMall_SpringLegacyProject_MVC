@@ -8,8 +8,8 @@
 			<tr>
 				<td>
 					주문자 이름<input type="text" name="key" value="${key}">
-					<input class="btn" type="button" name="btn_search" value="검색" onClick="go_search_order();"> 
-					<input class="btn" type="button" name="btn_total" value="전체보기 " onClick="go_total_order();"> 
+					<input class="btn" type="button" name="btn_search" value="검색" onClick="go_search('adminOrderList');"> 
+					<input class="btn" type="button" name="btn_total" value="전체보기 " onClick="go_total('adminOrderList');"> 
 				</td>
 			</tr>
 		</table>

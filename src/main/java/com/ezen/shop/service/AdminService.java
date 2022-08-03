@@ -17,26 +17,26 @@ public class AdminService {
 		return adao.loginCheck(workId, workPwd);
 	}
 
-	public HashMap<String, Object> productList(int page) {
+	public HashMap<String, Object> productList(int page, String key) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		Paging paging = new Paging();
 		paging.setPage(page);
-		paging.setTotalCount(adao.getAllCount("product"));
+		paging.setTotalCount(adao.getAllCount("product", "name", key));
 		
-		result.put("productList", adao.productList(paging));
+		result.put("productList", adao.productList(paging, key));
 		result.put("paging", paging);
 		return result;
 	}
 
-	public HashMap<String, Object> orderList(int page) {
+	public HashMap<String, Object> orderList(int page, String key) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		Paging paging = new Paging();
 		paging.setPage(page);
-		paging.setTotalCount(adao.getAllCount("order_view"));
+		paging.setTotalCount(adao.getAllCount("order_view", "mname", key));
 		
-		result.put("orderList", adao.orderList(paging));
+		result.put("orderList", adao.orderList(paging, key));
 		result.put("paging", paging);
 		return result;
 	}

@@ -57,10 +57,22 @@ public class AdminController {
 		if(id==null){
 			mav.setViewName("redirect:/admin");
 		}else {
-			int page = 1;
 			if(request.getParameter("first")!=null) {
 				session.removeAttribute("page");
+				session.removeAttribute("key");
 			}
+			
+			String key = "";
+			if(request.getParameter("key")!=null) {
+				key = request.getParameter("key");
+				session.setAttribute("key", key);
+			}else if(session.getAttribute("key")!=null) {
+				key = (String)session.getAttribute("key");
+			}else {
+				session.removeAttribute("key");
+			}
+			
+			int page = 1;
 			if(request.getParameter("page")!=null) {
 				page = Integer.parseInt(request.getParameter("page"));
 				session.setAttribute("page", page);
@@ -69,9 +81,11 @@ public class AdminController {
 			}else {
 				session.removeAttribute("page");
 			}
-			HashMap<String, Object> resultMap = as.productList(page);
+			
+			HashMap<String, Object> resultMap = as.productList(page, key);
 			mav.addObject("productList", (List<ProductVO>)resultMap.get("productList"));
 			mav.addObject("paging", (Paging)resultMap.get("paging"));
+			mav.addObject("key", key);
 			mav.setViewName("admin/product/productList");
 		}
 		return mav;
@@ -84,10 +98,22 @@ public class AdminController {
 		if(session.getAttribute("workId")==null){
 			mav.setViewName("redirect:/admin");
 		}else {
-			int page = 1;
 			if(request.getParameter("first")!=null) {
 				session.removeAttribute("page");
+				session.removeAttribute("key");
 			}
+			
+			String key = "";
+			if(request.getParameter("key")!=null) {
+				key = request.getParameter("key");
+				session.setAttribute("key", key);
+			}else if(session.getAttribute("key")!=null) {
+				key = (String)session.getAttribute("key");
+			}else {
+				session.removeAttribute("key");
+			}
+			
+			int page = 1;
 			if(request.getParameter("page")!=null) {
 				page = Integer.parseInt(request.getParameter("page"));
 				session.setAttribute("page", page);
@@ -96,9 +122,11 @@ public class AdminController {
 			}else {
 				session.removeAttribute("page");
 			}
-			HashMap<String, Object> resultMap = as.orderList(page);
+			
+			HashMap<String, Object> resultMap = as.orderList(page, key);
 			mav.addObject("orderList", (List<OrderVO>)resultMap.get("orderList"));
 			mav.addObject("paging", (Paging)resultMap.get("paging"));
+			mav.addObject("key", key);
 			mav.setViewName("admin/order/orderList");
 		}
 		return mav;

@@ -8,3 +8,15 @@ function worker_check(){
 	}
 	return true;
 }
+
+function go_search(requestName){
+	if(document.frm.key.value=="") return;
+	document.frm.action = requestName+"?page=1";
+	document.frm.submit();
+}
+
+function go_total(requestName){
+	document.frm.key.value=="";
+	document.frm.action = requestName+"?page=1";
+	document.frm.submit();
+}
