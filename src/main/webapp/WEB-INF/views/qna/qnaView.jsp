@@ -18,7 +18,7 @@
 			</tr>
 			<tr>
 				<th align="center">질문 내용</th>
-				<td align="left">${qnaVO.content}</td>
+				<td align="left"><pre>${qnaVO.content}</pre></td>
 			</tr>
 			<tr>
 				<th align="center">답변 내용</th>

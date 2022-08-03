@@ -48,4 +48,11 @@ public class QnaDao {
 				new BeanPropertyRowMapper<QnaVO>(QnaVO.class), qseq);
 		return qvo;
 	}
+
+
+	public void insertQna(QnaVO qvo) {
+		String sql = "insert into qna(qseq,subject,content,id)"
+				+ " values(qna_seq.nextVal,?,?,?)";
+		template.update(sql, qvo.getSubject(), qvo.getContent(), qvo.getId());
+	}
 }

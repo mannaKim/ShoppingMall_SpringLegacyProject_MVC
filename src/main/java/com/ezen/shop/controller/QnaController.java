@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.shop.dto.MemberVO;
+import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.service.QnaService;
 
 @Controller
@@ -43,5 +44,32 @@ public class QnaController {
 			mav.setViewName("qna/qnaView");
 		}
 		return mav;
+	}
+	
+	@RequestMapping("/qnaWriteForm")
+	public String qna_write_form(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		if(mvo==null) {
+			return "member/login";
+		}
+		return "qna/qnaWrite";
+	}
+	
+	@RequestMapping("/qnaWrite")
+	public String qna_write(HttpServletRequest request,
+			@RequestParam("subject") String subject, @RequestParam("content") String content) {
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		if(mvo==null) {
+			return "member/login";
+		}else {
+			QnaVO qvo = new QnaVO();
+			qvo.setSubject(subject);
+			qvo.setContent(content);
+			qvo.setId(mvo.getId());
+			qs.insertQna(qvo);
+		}
+		return "redirect:/qnaList";
 	}
 }
