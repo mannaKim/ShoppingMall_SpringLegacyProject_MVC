@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.ezen.shop.dto.ProductVO;
+import com.ezen.shop.util.Paging;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Repository
@@ -38,8 +39,13 @@ public class AdminDao {
 	}
 
 
-	public List<ProductVO> productList() {
-		String sql = "select * from product order by pseq desc";
+	public List<ProductVO> productList(Paging paging) {
+		String sql = "select * from ("
+				+ "select * from ("
+				+ "select rownum as rn, p.* from "
+				+ "((select * from product order by pseq desc) p)"
+				+ ") where rn>=?"
+				+ ") where rn<=?";
 		List<ProductVO> list = template.query(sql, new RowMapper<ProductVO>() {
 			@Override
 			public ProductVO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -55,7 +61,19 @@ public class AdminDao {
 				pvo.setIndate(rs.getTimestamp("indate"));
 				return pvo;
 			}
-		});
+		}, paging.getStartNum(), paging.getEndNum());
 		return list;
+	}
+
+
+	public int getAllCount(String tableName) {
+		String sql = "select count(*) as cnt from "+tableName;
+		List<Integer> list = template.query(sql, new RowMapper<Integer>() {
+			@Override
+			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getInt("cnt");
+			}
+		});
+		return list.get(0);
 	}
 }
