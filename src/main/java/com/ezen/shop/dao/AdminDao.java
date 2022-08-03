@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.ezen.shop.dto.MemberVO;
 import com.ezen.shop.dto.OrderVO;
 import com.ezen.shop.dto.ProductVO;
+import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.util.Paging;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -39,8 +40,21 @@ public class AdminDao {
 		else result = 0;
 		return result;
 	}
+	
+	
+	public int getAllCount(String tableName, String fieldName, String key) {
+		String sql = "select count(*) as cnt from "+tableName
+				+" where "+fieldName+" like '%'||?||'%'";
+		List<Integer> list = template.query(sql, new RowMapper<Integer>() {
+			@Override
+			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getInt("cnt");
+			}
+		}, key);
+		return list.get(0);
+	}
 
-
+	
 	public List<ProductVO> productList(Paging paging, String key) {
 		String sql = "select * from ("
 				+ "select * from ("
@@ -67,20 +81,7 @@ public class AdminDao {
 		return list;
 	}
 
-
-	public int getAllCount(String tableName, String fieldName, String key) {
-		String sql = "select count(*) as cnt from "+tableName
-				+" where "+fieldName+" like '%'||?||'%'";
-		List<Integer> list = template.query(sql, new RowMapper<Integer>() {
-			@Override
-			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return rs.getInt("cnt");
-			}
-		}, key);
-		return list.get(0);
-	}
-
-
+	
 	public List<OrderVO> orderList(Paging paging, String key) {
 		String sql = "select * from ("
 				+ "select * from ("
@@ -139,6 +140,47 @@ public class AdminDao {
 				return mvo;
 			}
 		}, key, paging.getStartNum(), paging.getEndNum());
+		return list;
+	}
+
+
+	public int getAllCountForTwoField(String tableName, String fieldName1, String fieldName2, String key) {
+		String sql = "select count(*) as cnt from "+tableName
+				+" where "+fieldName1+" like '%'||?||'%'"
+						+ " or "+fieldName2+" like '%'||?||'%'";
+		List<Integer> list = template.query(sql, new RowMapper<Integer>() {
+			@Override
+			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getInt("cnt");
+			}
+		}, key, key);
+		return list.get(0);
+	}
+
+	
+	public List<QnaVO> qnaList(Paging paging, String key) {
+		String sql = "select * from ("
+				+ "select * from ("
+				+ "select rownum as rn, q.* from "
+				+ "((select * from qna"
+				+ " where subject like '%'||?||'%' or content like '%'||?||'%'"
+				+ " order by rep asc, indate desc) q)"
+				+ ") where rn>=?"
+				+ ") where rn<=?";
+		List<QnaVO> list = template.query(sql, new RowMapper<QnaVO>() {
+			@Override
+			public QnaVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				QnaVO qvo = new QnaVO();
+				qvo.setQseq(rs.getInt("qseq"));
+				qvo.setSubject(rs.getString("subject"));
+				qvo.setContent(rs.getString("content"));
+				qvo.setReply(rs.getString("reply"));
+				qvo.setId(rs.getString("id"));
+				qvo.setRep(rs.getString("rep"));
+				qvo.setIndate(rs.getTimestamp("indate"));
+				return qvo;
+			}
+		}, key, key, paging.getStartNum(), paging.getEndNum());
 		return list;
 	}
 }

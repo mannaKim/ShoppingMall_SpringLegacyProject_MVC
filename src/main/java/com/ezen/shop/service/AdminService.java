@@ -52,4 +52,16 @@ public class AdminService {
 		result.put("paging", paging);
 		return result;
 	}
+
+	public HashMap<String, Object> qnaList(int page, String key) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		Paging paging = new Paging();
+		paging.setPage(page);
+		paging.setTotalCount(adao.getAllCountForTwoField("qna", "subject", "content", key));
+		
+		result.put("qnaList", adao.qnaList(paging, key));
+		result.put("paging", paging);
+		return result;
+	}
 }

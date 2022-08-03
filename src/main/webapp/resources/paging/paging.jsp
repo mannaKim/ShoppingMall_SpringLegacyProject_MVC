@@ -17,7 +17,7 @@
 			var="index">
 			<c:choose>
 				<c:when test="${paging.page==index}">
-					<span style="color: orange; font-weight: blod">${index}&nbsp;</span>
+					<span style="color: orange; font-weight: bold">${index}&nbsp;</span>
 				</c:when>
 				<c:otherwise>
 					<a href="${action}?page=${index}">${index}</a>&nbsp;
