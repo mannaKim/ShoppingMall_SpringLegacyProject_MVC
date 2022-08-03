@@ -1,5 +1,8 @@
 package com.ezen.shop.controller;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ezen.shop.dto.MemberVO;
 import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.service.QnaService;
+import com.ezen.shop.util.Paging;
 
 @Controller
 public class QnaController {
@@ -26,7 +30,19 @@ public class QnaController {
 		if(mvo==null) {
 			mav.setViewName("member/login");
 		}else {
-			mav.addObject("qnaList", qs.listQna(mvo.getId()));
+			// 출력할 페이지 설정(request나 session에 page가 있다면 그 페이지로, 아니면 1페이지로)
+			int page = 1;
+			if(request.getParameter("page")!=null) {
+				page = Integer.parseInt(request.getParameter("page"));
+				session.setAttribute("page", page);
+			}else if(session.getAttribute("page")!=null) {
+				page = (int)session.getAttribute("page");
+			}else {
+				session.removeAttribute("page");
+			}
+			HashMap<String, Object> result = qs.listQna(mvo.getId(), page);
+			mav.addObject("qnaList", (List<QnaVO>)result.get("qnaList"));
+			mav.addObject("paging", (Paging)result.get("paging"));
 			mav.setViewName("qna/qnaList");
 		}
 		return mav;

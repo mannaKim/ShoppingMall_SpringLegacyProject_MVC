@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.ezen.shop.dto.QnaVO;
+import com.ezen.shop.util.Paging;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Repository
@@ -22,8 +23,14 @@ public class QnaDao {
 	}
 	
 	
-	public List<QnaVO> listQna(String id) {
-		String sql = "select * from qna where id=? order by qseq desc";
+	public List<QnaVO> listQna(Paging paging, String id) {
+		//String sql = "select * from qna where id=? order by qseq desc";
+		String sql = "select * from ("
+				+ "select * from ("
+				+ "select rownum as rn, q.* from "
+				+ "((select * from qna where id=? order by qseq desc) q)"
+				+ ") where rn>=?"
+				+ ") where rn<=?";
 		List<QnaVO> list = template.query(sql, new RowMapper<QnaVO>() {
 			@Override
 			public QnaVO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -37,7 +44,7 @@ public class QnaDao {
 				qvo.setIndate(rs.getTimestamp("indate"));
 				return qvo;
 			}
-		}, id);
+		}, id, paging.getStartNum(), paging.getEndNum());
 		return list;
 	}
 
@@ -54,5 +61,17 @@ public class QnaDao {
 		String sql = "insert into qna(qseq,subject,content,id)"
 				+ " values(qna_seq.nextVal,?,?,?)";
 		template.update(sql, qvo.getSubject(), qvo.getContent(), qvo.getId());
+	}
+
+
+	public int getAllCount(String id) {
+		String sql = "select count(*) as cnt from qna where id=?";
+		List<Integer> list = template.query(sql, new RowMapper<Integer>() {
+			@Override
+			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getInt("cnt");
+			}
+		}, id);
+		return list.get(0);
 	}
 }
