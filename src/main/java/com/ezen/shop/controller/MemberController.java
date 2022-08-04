@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.shop.dto.MemberVO;
 import com.ezen.shop.service.MemberService;
@@ -112,6 +113,19 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		if(result==1) session.setAttribute("loginUser", mvo);
 		
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/withdrawal")
+	public String withdrawal(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		if(mvo==null) {
+			return "member/login";
+		}else {
+			ms.withdrawal(mvo.getId());
+			session.removeAttribute("loginUser");
+		}
 		return "redirect:/";
 	}
 }

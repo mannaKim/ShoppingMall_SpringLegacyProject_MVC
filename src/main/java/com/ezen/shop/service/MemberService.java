@@ -22,4 +22,8 @@ public class MemberService {
 	public int updateMember(MemberVO mvo) {
 		return mdao.updateMember(mvo);
 	}
+
+	public void withdrawal(String id) {
+		mdao.withdrawal(id);
+	}
 }

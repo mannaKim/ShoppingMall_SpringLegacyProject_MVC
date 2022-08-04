@@ -66,4 +66,9 @@ public class MemberDao {
 				mvo.getId());
 		return result;
 	}
+
+	public void withdrawal(String id) {
+		String sql = "update member set useyn='n' where id=?";
+		template.update(sql, id);
+	}
 }
