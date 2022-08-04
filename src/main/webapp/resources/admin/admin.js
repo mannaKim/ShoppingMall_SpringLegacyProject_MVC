@@ -112,3 +112,12 @@ function go_order_save(){
 		document.frm.submit();
 	}
 }
+
+function go_view(qseq){
+	location.href = "adminQnaView?qseq="+qseq;
+}
+
+function go_rep(){
+	document.frm.action="adminQnaRepSave";
+	document.frm.submit();
+}

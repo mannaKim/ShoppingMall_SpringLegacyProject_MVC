@@ -21,6 +21,7 @@ import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.service.AdminService;
 import com.ezen.shop.service.ProductService;
+import com.ezen.shop.service.QnaService;
 import com.ezen.shop.util.Paging;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -35,6 +36,9 @@ public class AdminController {
 	
 	@Autowired
 	ProductService ps;
+	
+	@Autowired
+	QnaService qs;
 	
 	@RequestMapping("/admin")
 	public String admin() {
@@ -297,6 +301,7 @@ public class AdminController {
 		return mav;
 	}
 	
+	
 	@RequestMapping("/adminQnaList")
 	public ModelAndView admin_qna_list(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
@@ -336,5 +341,26 @@ public class AdminController {
 			mav.setViewName("admin/qna/qnaList");
 		}
 		return mav;
+	}
+	
+	@RequestMapping("/adminQnaView")
+	public ModelAndView admin_qna_view(HttpServletRequest request,
+			@RequestParam("qseq") int qseq) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("qnaVO", qs.getQna(qseq));
+		mav.setViewName("admin/qna/qnaView");
+		return mav;
+	}
+	
+	@RequestMapping(value="/adminQnaRepSave", method=RequestMethod.POST)
+	public String admin_qna_rep_save(HttpServletRequest request,
+			@RequestParam("qseq") int qseq, @RequestParam("reply") String reply) {
+		QnaVO qvo = new QnaVO();
+		qvo.setQseq(qseq);
+		qvo.setReply(reply);
+		
+		as.updateQna(qvo);
+		
+		return "redirect:/adminQnaView?qseq="+qseq;
 	}
 }

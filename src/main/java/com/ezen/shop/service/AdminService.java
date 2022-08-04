@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ezen.shop.dao.AdminDao;
 import com.ezen.shop.dto.ProductVO;
+import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.util.Paging;
 
 @Service
@@ -78,5 +79,9 @@ public class AdminService {
 		for(int odseq : resultArr) {
 			adao.updateOrderResult(odseq);
 		}
+	}
+
+	public void updateQna(QnaVO qvo) {
+		adao.updateQna(qvo);
 	}
 }

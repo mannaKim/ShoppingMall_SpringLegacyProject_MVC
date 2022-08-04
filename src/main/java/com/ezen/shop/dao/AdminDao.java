@@ -209,4 +209,10 @@ public class AdminDao {
 		}, key, key, paging.getStartNum(), paging.getEndNum());
 		return list;
 	}
+
+
+	public void updateQna(QnaVO qvo) {
+		String sql = "update qna set reply=?, rep='2' where qseq=?";
+		template.update(sql, qvo.getReply(), qvo.getQseq());
+	}
 }
