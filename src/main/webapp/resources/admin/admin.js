@@ -60,3 +60,8 @@ function go_save(){
 		theForm.submit();
 	}
 }
+
+function go_detail(pseq){
+	document.frm.action = "adminProductDetail?pseq="+pseq;
+	document.frm.submit();
+}

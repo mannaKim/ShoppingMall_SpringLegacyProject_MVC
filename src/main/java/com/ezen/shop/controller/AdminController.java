@@ -20,6 +20,7 @@ import com.ezen.shop.dto.OrderVO;
 import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.service.AdminService;
+import com.ezen.shop.service.ProductService;
 import com.ezen.shop.util.Paging;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -31,6 +32,9 @@ public class AdminController {
 	
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	ProductService ps;
 	
 	@RequestMapping("/admin")
 	public String admin() {
@@ -131,6 +135,22 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		return "redirect:/productList"; 
+	}
+	
+	@RequestMapping("/adminProductDetail")
+	public ModelAndView admin_product_detail(HttpServletRequest request,
+			@RequestParam("pseq") int pseq) {
+		ModelAndView mav = new ModelAndView();
+		
+		//ProductService를 @Autowired 해서 전에 사용했던 메서드 사용
+		ProductVO pvo = ps.getProduct(pseq);
+		String [] kindList = {"", "Heels", "Boots", "Sandals", "Sneakers", "Slippers", "On Sale"};
+		
+		mav.addObject("productVO", pvo);
+		mav.addObject("kind", kindList[Integer.parseInt(pvo.getKind())]);
+		mav.setViewName("admin/product/productDetail");
+		
+		return mav;
 	}
 	
 	@RequestMapping("/adminOrderList")
