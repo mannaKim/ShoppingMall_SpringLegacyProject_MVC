@@ -81,6 +81,15 @@ public class AdminDao {
 		return list;
 	}
 
+
+	public void insertProduct(ProductVO pvo) {
+		String sql = "insert into product(pseq, kind, name, price1, price2, price3, content, image)"
+				+ " values(product_seq.nextVal, ?, ?, ?, ?, ?, ?, ?)";
+		template.update(sql, pvo.getKind(), pvo.getName(),
+				pvo.getPrice1(), pvo.getPrice2(), pvo.getPrice3(),
+				pvo.getContent(), pvo.getImage());
+	}
+	
 	
 	public List<OrderVO> orderList(Paging paging, String key) {
 		String sql = "select * from ("

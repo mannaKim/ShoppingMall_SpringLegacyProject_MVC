@@ -1,14 +1,17 @@
 package com.ezen.shop.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,11 +21,16 @@ import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.dto.QnaVO;
 import com.ezen.shop.service.AdminService;
 import com.ezen.shop.util.Paging;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 @Controller
 public class AdminController {
 	@Autowired
 	AdminService as;
+	
+	@Autowired
+	ServletContext context;
 	
 	@RequestMapping("/admin")
 	public String admin() {
@@ -91,6 +99,38 @@ public class AdminController {
 			mav.setViewName("admin/product/productList");
 		}
 		return mav;
+	}
+	
+	@RequestMapping("/productWriteForm")
+	public ModelAndView product_write_form(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		String [] kindList = {"Heels", "Boots", "Sandals", "Sneakers", "Slippers", "On Sale"};
+		mav.addObject("kindList", kindList);
+		mav.setViewName("admin/product/productWriteForm");
+		return mav;
+	}
+	
+	@RequestMapping(value="/productWrite", method=RequestMethod.POST)
+	public String product_write(HttpServletRequest request) {
+		String savePath = context.getRealPath("resources/product_images");
+		ProductVO pvo = new ProductVO();
+		
+		try {
+			MultipartRequest multi = new MultipartRequest(
+					request, savePath, 5*1024*1024, "UTF-8", new DefaultFileRenamePolicy()
+			);
+			pvo.setName(multi.getParameter("name"));
+			pvo.setKind(multi.getParameter("kind"));
+			pvo.setPrice1(Integer.parseInt(multi.getParameter("price1")));
+			pvo.setPrice2(Integer.parseInt(multi.getParameter("price2")));
+			pvo.setPrice3(Integer.parseInt(multi.getParameter("price3")));
+			pvo.setContent(multi.getParameter("content"));
+			pvo.setImage(multi.getFilesystemName("image"));
+			as.insertProduct(pvo);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/productList"; 
 	}
 	
 	@RequestMapping("/adminOrderList")

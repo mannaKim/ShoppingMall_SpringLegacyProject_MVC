@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ezen.shop.dao.AdminDao;
+import com.ezen.shop.dto.ProductVO;
 import com.ezen.shop.util.Paging;
 
 @Service
@@ -27,6 +28,10 @@ public class AdminService {
 		result.put("productList", adao.productList(paging, key));
 		result.put("paging", paging);
 		return result;
+	}
+	
+	public void insertProduct(ProductVO pvo) {
+		adao.insertProduct(pvo);
 	}
 
 	public HashMap<String, Object> orderList(int page, String key) {
