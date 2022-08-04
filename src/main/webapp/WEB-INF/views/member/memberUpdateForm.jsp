@@ -22,7 +22,7 @@
 				value="${loginUser.address1}" readonly><br>
 			<label>detailAddress</label>
 			<input type="text" id="sample6_detailAddress" placeholder="상세주소" name="address2" size="50" 
-				value="${loginUser.address2}">
+				value="${loginUser.address2}"><br>
 			<label>extraAddress</label>
 			<input type="text" id="sample6_extraAddress" placeholder="참고항목" name="address3" 
 				value="${loginUser.address3}" readonly>
