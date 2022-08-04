@@ -249,6 +249,13 @@ public class AdminController {
 		return mav;
 	}
 	
+	@RequestMapping("/orderUpdateResult")
+	public String order_update_result(@RequestParam("result") int [] resultArr) {
+		as.updateOrderResult(resultArr);
+		return "redirect:/adminOrderList";
+	}
+	
+	
 	@RequestMapping("/memberList")
 	public ModelAndView member_list(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();

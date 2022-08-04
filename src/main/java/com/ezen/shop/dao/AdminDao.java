@@ -101,6 +101,7 @@ public class AdminDao {
 				pvo.getContent(), pvo.getImage(), pvo.getUseyn(), pvo.getBestyn(), pvo.getPseq());
 	}
 	
+	
 	public List<OrderVO> orderList(Paging paging, String key) {
 		String sql = "select * from ("
 				+ "select * from ("
@@ -134,6 +135,12 @@ public class AdminDao {
 	}
 
 
+	public void updateOrderResult(int odseq) {
+		String sql = "update order_detail set result='2' where odseq=?";
+		template.update(sql, odseq);
+	}
+
+	
 	public List<MemberVO> memberList(Paging paging, String key) {
 		String sql = "select * from ("
 				+ "select * from ("

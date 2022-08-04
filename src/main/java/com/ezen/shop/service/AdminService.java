@@ -73,4 +73,10 @@ public class AdminService {
 		result.put("paging", paging);
 		return result;
 	}
+
+	public void updateOrderResult(int[] resultArr) {
+		for(int odseq : resultArr) {
+			adao.updateOrderResult(odseq);
+		}
+	}
 }

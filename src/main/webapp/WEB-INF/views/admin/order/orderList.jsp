@@ -38,7 +38,7 @@
 							</c:otherwise>
 						</c:choose>
 					</td>
-					<td>${orderVO.mname}</td>
+					<td>${orderVO.mname}(${orderVO.id})</td>
 					<td>${orderVO.pname}</td>
 					<td>${orderVO.quantity}</td>
 					<td>${orderVO.zip_num}</td>
