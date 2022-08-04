@@ -89,7 +89,17 @@ public class AdminDao {
 				pvo.getPrice1(), pvo.getPrice2(), pvo.getPrice3(),
 				pvo.getContent(), pvo.getImage());
 	}
-	
+
+
+	public void updateProduct(ProductVO pvo) {
+		String sql = "update product"
+				+ " set kind=?, name=?, price1=?, price2=?, price3=?,"
+				+ " content=?, image=?, useyn=?, bestyn=?"
+				+ " where pseq=?";
+		template.update(sql, 
+				pvo.getKind(), pvo.getName(), pvo.getPrice1(), pvo.getPrice2(), pvo.getPrice3(),
+				pvo.getContent(), pvo.getImage(), pvo.getUseyn(), pvo.getBestyn(), pvo.getPseq());
+	}
 	
 	public List<OrderVO> orderList(Paging paging, String key) {
 		String sql = "select * from ("

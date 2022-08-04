@@ -63,6 +63,7 @@ public class AdminController {
 		return mav;
 	}
 	
+	
 	@RequestMapping("/productList")
 	public ModelAndView product_list(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
@@ -152,6 +153,60 @@ public class AdminController {
 		
 		return mav;
 	}
+	
+	@RequestMapping("/productUpdateForm")
+	public ModelAndView product_update_form(HttpServletRequest request,
+			@RequestParam("pseq") int pseq) {
+		ModelAndView mav = new ModelAndView();
+		ProductVO pvo = ps.getProduct(pseq);
+		String [] kindList = {"Heels", "Boots", "Sandals", "Sneakers", "Slippers", "On Sale"};
+		
+		mav.addObject("productVO", pvo);
+		mav.addObject("kindList", kindList);
+		mav.setViewName("admin/product/productUpdate");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value="/productUpdate", method=RequestMethod.POST)
+	public String product_update(HttpServletRequest request) {
+		String savePath = context.getRealPath("resources/product_images");
+		ProductVO pvo = new ProductVO();
+		// 업데이트 이후 productDetail로 돌아가기 위해 전달할 상품번호(pseq)
+		int pseq = 0;
+		try {
+			MultipartRequest multi = new MultipartRequest(
+					request, savePath, 5*1024*1024, "UTF-8", new DefaultFileRenamePolicy()
+			);
+			pseq = Integer.parseInt(multi.getParameter("pseq"));
+			pvo.setPseq(pseq);
+			pvo.setName(multi.getParameter("name"));
+			pvo.setKind(multi.getParameter("kind"));
+			pvo.setPrice1(Integer.parseInt(multi.getParameter("price1")));
+			pvo.setPrice2(Integer.parseInt(multi.getParameter("price2")));
+			pvo.setPrice3(Integer.parseInt(multi.getParameter("price3")));
+			pvo.setContent(multi.getParameter("content"));
+			
+			// productUpdate.jsp에서 checkbox로 얻은 값이 있다면 "y", 없다면 "n"으로 설정
+			if(multi.getParameter("useyn")==null) pvo.setUseyn("n");
+			else pvo.setUseyn("y");
+			if(multi.getParameter("bestyn")==null) pvo.setBestyn("n");
+			else pvo.setBestyn("y");
+			
+			// productUpdate.jsp에서 상품 이미지가 업데이트 되었다면 getFilesystemName으로 받고, 
+			// 아니라면 따로 히든으로 보낸 "oldfilename"을 getParameter로 받아 설정
+			if(multi.getFilesystemName("image")==null) 
+				pvo.setImage(multi.getParameter("oldfilename"));
+			else 
+				pvo.setImage(multi.getFilesystemName("image"));
+			
+			as.updateProduct(pvo);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/adminProductDetail?pseq="+pseq; 
+	}
+	
 	
 	@RequestMapping("/adminOrderList")
 	public ModelAndView admin_order_list(HttpServletRequest request) {

@@ -34,6 +34,10 @@ public class AdminService {
 		adao.insertProduct(pvo);
 	}
 
+	public void updateProduct(ProductVO pvo) {
+		adao.updateProduct(pvo);
+	}
+
 	public HashMap<String, Object> orderList(int page, String key) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
